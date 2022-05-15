@@ -29,11 +29,11 @@ class LoginActivity : AppCompatActivity() {
 
         val username = binding.username
         val password = binding.password
+        val secondPassword = binding.passwordTwo
         val login = binding.login
         val loading = binding.loading
 
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())[LoginViewModel::class.java]
 
         loginViewModel.loginFormState.observe(this@LoginActivity, Observer {
             val loginState = it ?: return@Observer
@@ -46,6 +46,11 @@ class LoginActivity : AppCompatActivity() {
             }
             if (loginState.passwordError != null) {
                 password.error = getString(loginState.passwordError)
+            }
+            if (loginState.verifyError != null) {
+                if (secondPassword != null) {
+                    secondPassword.error = getString(loginState.verifyError)
+                }
             }
         })
 

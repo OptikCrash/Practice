@@ -6,9 +6,7 @@ import com.digitalrelay.practice.data.model.LoggedInUser
  * Class that requests authentication and user information from the remote data source and
  * maintains an in-memory cache of login status and user credentials information.
  */
-
 class LoginRepository(val dataSource: LoginDataSource) {
-
     // in-memory cache of the loggedInUser object
     var user: LoggedInUser? = null
         private set
@@ -35,6 +33,14 @@ class LoginRepository(val dataSource: LoginDataSource) {
             setLoggedInUser(result.data)
         }
 
+        return result
+    }
+
+    fun register(username: String, password: String, verifyPassword: String): Result<LoggedInUser> {
+        val result = dataSource.createUser(username, password, verifyPassword)
+        if (result is Result.Success) {
+            setLoggedInUser(result.data)
+        }
         return result
     }
 
